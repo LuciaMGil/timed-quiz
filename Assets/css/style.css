@@ -1,0 +1,20 @@
+h1 {
+    font-size: 15px;
+    text-align: left ;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#hide {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;s
+}
+
+.btn {
+    padding: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+}
+
+#questions-container {
+    display: none;
+}
