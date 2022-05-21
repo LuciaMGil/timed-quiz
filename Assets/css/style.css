@@ -1,20 +1,46 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+body {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
 h1 {
     font-size: 15px;
     text-align: left ;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #hide {
     text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;s
 }
 
 .btn {
     padding: 10px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: rgb(100, 100, 191);
+    border:rgb(100, 100, 191);
+    border-radius: 11px;
 
+   
+}
+
+.btn:hover {
+    background-color: rgb(209, 209, 250);
+    border:rgb(209, 209, 250);
 }
 
 #questions-container {
     display: none;
+}
+
+#question {
+    font-weight: bolder;
+    padding: 30px;
+    font-size: 20px;
+
+}
+#current-question {
+    text-align: center;
 }
