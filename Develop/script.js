@@ -11,6 +11,7 @@ const responseMsg = $('#response-message');
 const endPage = $('#quiz-end');
 const endDiv = $('#end-div');
 const submitBtn = $('#submit');
+const viewHighscore = $('#highscore');
 var input = $('#saveServer');
 var currentQuestion = {};
 var acceptedAnswers = true;
@@ -85,7 +86,7 @@ answerBtn.on('click', event => {
         secondsLeft -= 10;
         console.log("This is your score " + score);
     }
-    
+    window.localStorage.setItem("score", score);
     questionCounter++;
     
     newQuestions();
@@ -125,9 +126,14 @@ answerBtn.on('click', event => {
 
 submitBtn.on('click', event => {
     event.preventDefault();
-
     var names = document.querySelector('#names').value;
     console.log(names);
-    
     window.localStorage.setItem("allNames", names);
+    endDiv.hide();
+    viewHighscore.show();
+    var retrievedName = localStorage.getItem('allNames');
+    var retrievedScore = localStorage.getItem('score');
+    viewHighscore.append("SCORE: " + retrievedName + " " + retrievedScore);
+
 })
+
