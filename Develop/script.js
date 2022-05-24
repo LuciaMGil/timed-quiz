@@ -9,6 +9,9 @@ var secondsLeft = 75;
 const answers = Array.from(document.getElementsByClassName('answer-text'));
 const responseMsg = $('#response-message');
 const endPage = $('#quiz-end');
+const endDiv = $('#end-div');
+const submitBtn = $('#submit');
+var input = $('#saveServer');
 var currentQuestion = {};
 var acceptedAnswers = true;
 var score = 0;
@@ -55,7 +58,7 @@ startPage.append(`<h2>Coding Quiz Challenge</h2><p>Try to answer the following c
 // Hide the start page when clicked and show the first question
 startBtn.on('click', function () {
     console.log ("Quiz has begun");
-    $('#hide').hide();
+    $('#start').hide();
     $('#questions-container').show();
     startquiz();
     
@@ -104,8 +107,8 @@ answerBtn.on('click', event => {
     } else {
         endPage.append(`<h2>End of quiz <br> Your total score: ${score} </h2>`);
         $('#questions-container').hide();
-        endPage.show();
-        stopTimer();
+        endDiv.show();
+        
     }
 };
 
@@ -116,12 +119,15 @@ answerBtn.on('click', event => {
         timer.text(secondsLeft + " seconds left");
         if (secondsLeft === 0) {
             clearInterval(timerInterval);
-            endPage.append(`<h2>End of quiz <br> Your total score: ${score} </h2>`);
-            $('#questions-container').hide();
-            endPage.show();
         }
     }, 1000);
-    
  }
 
+submitBtn.on('click', event => {
+    event.preventDefault();
 
+    var names = document.querySelector('#names').value;
+    console.log(names);
+    
+    window.localStorage.setItem("allNames", names);
+})

@@ -13,10 +13,13 @@ h1 {
     text-align: left ;
 }
 
-#hide {
-    text-align: center;
+.hide {
+    display: none;
 }
 
+#start {
+    align-content: center;
+}
 .btn {
     padding: 10px;
     background-color: rgb(100, 100, 191);
