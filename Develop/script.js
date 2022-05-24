@@ -4,6 +4,8 @@ const answerBtn = $('.answer-text');
 var startQuiz = $('#unhide');
 var questionsContainer = $('#questions-container');
 var questionID = $('#question');
+var timer = $('#timer');
+var secondsLeft = 75;
 const answers = Array.from(document.getElementsByClassName('answer-text'));
 const responseMsg = $('#response-message');
 const endPage = $('#quiz-end');
@@ -15,23 +17,33 @@ var availableQuestions=[];
 
 // Constants
 const correctPoints = 10;
-const maxQuestions = 3;
+const incorrectPoints = 5;
 
 const questions = [ 
     {
         question: "Commonly used data types DO NOT include?",
-        choices: ["strings", "booleans", "alerts", "numbers",],
-        answer: "alerts"
+        choices: ["Strings", "Booleans", "Alerts", "Numbers",],
+        answer: "Alerts"
     },
     {
         question: "The condition in an if/else statement is enclosed within _____.",
-        choices: ["quotes", "curly brackets", "parenthesis", "square brackets",],
-        answer: "curly brackets"
+        choices: ["Quotes", "Curly brackets", "Parenthesis", "Square brackets",],
+        answer: "Curly brackets"
     },
     {
-        question: "THIRD",
-        choices: ["quotes", "curly brackets", "parenthesis", "square brackets",],
-        answer: "quotes"
+        question: "Arrays in Javascript are used to store _____.",
+        choices: ["Numbers and strings", "Other arrays", "Booleans", "All of the above",],
+        answer: "All of the above"
+    },
+    {
+        question: "String values must be enclosed within ______ when being assigned to variables.",
+        choices: ["Commas", "Parentheses", "Quotes", "Curly Brackets",],
+        answer: "Quotes"
+    },
+    {
+        question: "A very useful tool used during development and debugging for printing content to the debugger is:",
+        choices: ["Javascript", "Terminal/Bash", "For loops", "Console.log",],
+        answer: "Console.log"
     }
     
 ];
@@ -46,33 +58,43 @@ startBtn.on('click', function () {
     $('#hide').hide();
     $('#questions-container').show();
     startquiz();
+    
 });
+// Start the quiz at zero and run the new questions function
+startquiz = () => {
+    questionCounter = 0;
+    score = 0;
+    newQuestions();
+    setTime();
+};
 
 answerBtn.on('click', event => {
     $('#result').remove();
     console.log(currentQuestion);
     let chosenAnswer = event.target.innerHTML
     if (chosenAnswer === currentQuestion.answer) {
-        responseMsg.append(`<h1 id="result">Correct</h1>`);
+        responseMsg.append(`<h2 id="result">Correct!</h2>`);
+        score = score + correctPoints;
+        console.log("This is your score " + score);
     } else {
-        responseMsg.append(`<h1 id="result">INCORRECT!</h1>`);
+        responseMsg.append(`<h2 id="result">INCORRECT!</h2>`);
+        score = score + incorrectPoints;
+        secondsLeft -= 10;
+        console.log("This is your score " + score);
     }
+    
     questionCounter++;
+    
     newQuestions();
 })
 
-// Start the quiz at zero and run the new questions function
-startquiz = () => {
-    questionCounter = 0;
-    score = 0;
-    newQuestions();
-};
 
 
 // Append random questions to 
  newQuestions = () => {
+   
     $('#current-question').remove();
-    console.log(questionCounter);
+    // console.log(questionCounter);
     currentQuestion = questions[questionCounter];
     if (currentQuestion) {
     questionID.append(`<h1 id='current-question'>${currentQuestion.question}</h1>`);
@@ -80,9 +102,26 @@ startquiz = () => {
         answer.innerHTML = currentQuestion.choices[i];
     })
     } else {
-        endPage.append(`<h2>End of quiz <br> Your score: </h2>`);
+        endPage.append(`<h2>End of quiz <br> Your total score: ${score} </h2>`);
         $('#questions-container').hide();
         endPage.show();
+        stopTimer();
     }
 };
+
+
+ setTime = () => {
+    var timerInterval = setInterval(function () {
+        secondsLeft--;
+        timer.text(secondsLeft + " seconds left");
+        if (secondsLeft === 0) {
+            clearInterval(timerInterval);
+            endPage.append(`<h2>End of quiz <br> Your total score: ${score} </h2>`);
+            $('#questions-container').hide();
+            endPage.show();
+        }
+    }, 1000);
+    
+ }
+
 
