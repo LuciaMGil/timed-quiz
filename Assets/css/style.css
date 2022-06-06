@@ -57,3 +57,17 @@ h1 {
 #current-question {
     text-align: center;
 }
+#highscoresList {
+    list-style: none;
+    padding-left: 0px;
+    margin-bottom: 10px;
+}
+
+.high-score {
+    font-size: 20px;
+}
+
+
+.high-score:hover {
+    transform: scale(1.025);
+}

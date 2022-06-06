@@ -1,23 +1,24 @@
 var startBtn = $(`#start`);
 const answerBtn = $('.answer-text');
 var questionID = $('#question');
-var timer = $('#timer');
 const answers = Array.from(document.getElementsByClassName('answer-text'));
-const responseMsg = $('#response-message');
+// const responseMsg = $('#response-message');
 const endPage = $('#quiz-end');
 const endDiv = $('#end-div');
 const submitBtn = $('#submit');
 const viewHighscore = $('#highscore');
+const highscoresList = $('#highscoresList');
 var score = 0;
 var questionCounter = 0;
 var secondsLeft = 75;
 var availableQuestions=[];
 var currentQuestion = {};
 
-// Constants
+// Constants - when you get a question right you get 10 points, when you get it wrong you lose 5 points
 const correctPoints = 10;
 const incorrectPoints = 5;
 
+// Array of objects that contains questions
 const questions = [ 
     {
         question: "Commonly used data types DO NOT include?",
@@ -54,58 +55,65 @@ startBtn.on('click', function () {
     startquiz();
 });
 
-// Start the quiz at zero and run the new questions function
+// When you start the quiz, it will display the first question and start the timer
 startquiz = () => {
     newQuestions();
     setTime();
 };
 
+
 answerBtn.on('click', event => {
+    // Removes previous result
     $('#result').remove();
-    console.log(currentQuestion);
-    let chosenAnswer = event.target.innerHTML
+    // Displays the text of the button you clicked. EX: Alerts
+    let chosenAnswer = event.target.innerHTML;
+    // If the chosen answer is the same as the questions answer in the array of objects then...
     if (chosenAnswer === currentQuestion.answer) {
-        responseMsg.append(`<h2 id="result">Correct!</h2>`);
+        // It will append "Correct!"
+        $('#response-message').append(`<h2 id="result">Correct!</h2>`);
+        // Add score of 10 points to your total score
         score = score + correctPoints;
-        console.log("This is your score " + score);
     } else {
-        responseMsg.append(`<h2 id="result">INCORRECT!</h2>`);
+        // It will append "Inorrect!"
+        $('#response-message').append(`<h2 id="result">Incorrect!</h2>`);
+        // Subtract score of 5 points to your total score
         score = score + incorrectPoints;
+        // Reduce time by 10 seconds
         secondsLeft -= 10;
     
         console.log("This is your score " + score);
 
     }
-    // const highscores = JSON.parse(localStorage.getItem("score", JSON.stringify(score)));
-    // console.log("this is the highscore: " + highscores);
-
-    // const scores = {
-    //     score: 
-    // }
+    // Adds one to question counter
     questionCounter++;
-    
+    // Runs a new question
     newQuestions();
 })
 
 
 
-// Append random questions to 
+// Generates the next question
  newQuestions = () => {
-   
+    // Removes previous question
     $('#current-question').remove();
-    // console.log(questionCounter);
+    // Every time a question gets added we use it as an index to move on to the next question
     currentQuestion = questions[questionCounter];
+    // If there is another question..
     if (currentQuestion) {
+    // Append a new question
     questionID.append(`<h1 id='current-question'>${currentQuestion.question}</h1>`);
+    // Add corresponding answer inner text to each question
     answers.forEach((answer, i) => {
         answer.innerHTML = currentQuestion.choices[i];
     })
     } else {
+        // If there are no more questions show final page and hide questions container
         endPage.append(`<h2>End of quiz <br> Your total score: ${score} </h2>`);
         $('#questions-container').hide();
         endDiv.show();
-      
-    
+        
+        localStorage.setItem("mostRecentScore",score);
+        
         
     }
 };
@@ -113,36 +121,68 @@ answerBtn.on('click', event => {
 
  setTime = () => {
     var timerInterval = setInterval(function () {
+        // Subtract seconds left every second
         secondsLeft--;
-        timer.text(secondsLeft + " seconds left");
+        // Add text to the timer
+        $('#timer').text(secondsLeft + " seconds left");
+        // If seconds left is zero or if there are no more questions stop timer and clear text
         if (secondsLeft === 0 || !currentQuestion) {
             clearInterval(timerInterval);
-            timer.text("");
+            $('#timer').text("");
         }
     }, 1000);
  }
 
+
+
+
+
+
+
 submitBtn.on('click', event => {
     event.preventDefault();
-    // Get data from input box
-    var names = document.querySelector('#names').value;
-    // If nothing is saved then save an empty array
-    if(localStorage.getItem('names') == null) {
-        localStorage.setItem('names', '[]');
-    }
+    var names = document.querySelector('#name').value;
+    const finalScore = $(score);
+    const mostRecentScore = localStorage.getItem('mostRecentScore');
+    const maxHighscores = 5;
+    viewHighscore.append("SCORE: " + mostRecentScore);
 
-    //  Add old data to new data
-    var oldData = JSON.parse(localStorage.getItem('names'));
-    oldData.push(names);
+   const highscores = JSON.parse(localStorage.getItem("highscores")) || [];
 
-    // Save old and new data
-    localStorage.setItem('names', JSON.stringify(oldData));
-    // window.localStorage.setItem("allNames", names);
+   const scoreObj = {
+       score: mostRecentScore,
+       name: names,
+   };
+
+   highscores.push(scoreObj);
+
+   highscores.sort = (a,b) => {
+    //    If b score is higher than a score then put b before a
+       return b.scoreObj - a.scoreObj
+   }
+    //    Cuts list off at 5 
+    highscores.splice(5);
+    localStorage.setItem('highscores', JSON.stringify(highscores));
     endDiv.hide();
+
+    // Highscores page
     viewHighscore.show();
-    // var retrievedName = localStorage.getItem('allNames');
-    // var retrievedScore = localStorage.getItem('score');
-    // viewHighscore.append("SCORE: " + retrievedName + " " + retrievedScore);
 
-})
 
+    
+    lastpage();
+   
+
+});
+
+
+
+lastpage = () => {
+    const highscores = JSON.parse(localStorage.getItem("highscores")) || [];
+    highscoresList.text(highscores);
+    highscores.map(score => {
+        return `<li class="high-score">${score.name} - ${score.score}</li>`
+    }).join("");
+    
+    
+}
