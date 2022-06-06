@@ -1,23 +1,18 @@
-var startPage = $(`#startpage`);
 var startBtn = $(`#start`);
 const answerBtn = $('.answer-text');
-var startQuiz = $('#unhide');
-var questionsContainer = $('#questions-container');
 var questionID = $('#question');
 var timer = $('#timer');
-var secondsLeft = 75;
 const answers = Array.from(document.getElementsByClassName('answer-text'));
 const responseMsg = $('#response-message');
 const endPage = $('#quiz-end');
 const endDiv = $('#end-div');
 const submitBtn = $('#submit');
 const viewHighscore = $('#highscore');
-var input = $('#saveServer');
-var currentQuestion = {};
-var acceptedAnswers = true;
 var score = 0;
 var questionCounter = 0;
+var secondsLeft = 75;
 var availableQuestions=[];
+var currentQuestion = {};
 
 // Constants
 const correctPoints = 10;
@@ -52,22 +47,15 @@ const questions = [
     
 ];
 
-// Start page message
-startPage.append(`<h2>Coding Quiz Challenge</h2><p>Try to answer the following code-related questions within the time limit.<br> Keep in mind that incorrect answers will penalize your score and time by 10 seconds!</p> `);
-
-
-// Hide the start page when clicked and show the first question
+// Hides the start page when clicked and starts the quiz
 startBtn.on('click', function () {
-    console.log ("Quiz has begun");
     $('#start').hide();
     $('#questions-container').show();
     startquiz();
-    
 });
+
 // Start the quiz at zero and run the new questions function
 startquiz = () => {
-    questionCounter = 0;
-    score = 0;
     newQuestions();
     setTime();
 };
@@ -84,9 +72,16 @@ answerBtn.on('click', event => {
         responseMsg.append(`<h2 id="result">INCORRECT!</h2>`);
         score = score + incorrectPoints;
         secondsLeft -= 10;
+    
         console.log("This is your score " + score);
+
     }
-    window.localStorage.setItem("score", score);
+    // const highscores = JSON.parse(localStorage.getItem("score", JSON.stringify(score)));
+    // console.log("this is the highscore: " + highscores);
+
+    // const scores = {
+    //     score: 
+    // }
     questionCounter++;
     
     newQuestions();
@@ -109,6 +104,8 @@ answerBtn.on('click', event => {
         endPage.append(`<h2>End of quiz <br> Your total score: ${score} </h2>`);
         $('#questions-container').hide();
         endDiv.show();
+      
+    
         
     }
 };
@@ -118,22 +115,34 @@ answerBtn.on('click', event => {
     var timerInterval = setInterval(function () {
         secondsLeft--;
         timer.text(secondsLeft + " seconds left");
-        if (secondsLeft === 0) {
+        if (secondsLeft === 0 || !currentQuestion) {
             clearInterval(timerInterval);
+            timer.text("");
         }
     }, 1000);
  }
 
 submitBtn.on('click', event => {
     event.preventDefault();
+    // Get data from input box
     var names = document.querySelector('#names').value;
-    console.log(names);
-    window.localStorage.setItem("allNames", names);
+    // If nothing is saved then save an empty array
+    if(localStorage.getItem('names') == null) {
+        localStorage.setItem('names', '[]');
+    }
+
+    //  Add old data to new data
+    var oldData = JSON.parse(localStorage.getItem('names'));
+    oldData.push(names);
+
+    // Save old and new data
+    localStorage.setItem('names', JSON.stringify(oldData));
+    // window.localStorage.setItem("allNames", names);
     endDiv.hide();
     viewHighscore.show();
-    var retrievedName = localStorage.getItem('allNames');
-    var retrievedScore = localStorage.getItem('score');
-    viewHighscore.append("SCORE: " + retrievedName + " " + retrievedScore);
+    // var retrievedName = localStorage.getItem('allNames');
+    // var retrievedScore = localStorage.getItem('score');
+    // viewHighscore.append("SCORE: " + retrievedName + " " + retrievedScore);
 
 })
 

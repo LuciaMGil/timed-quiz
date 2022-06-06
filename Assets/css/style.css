@@ -1,16 +1,21 @@
 *, *::before, *::after {
     box-sizing: border-box;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Space Mono', monospace;
+    color: aliceblue;
+    background-color: rgb(68, 68, 68);
 }
 body {
     padding: 0;
     margin: 0;
-    text-align: center;
+    text-align: center; 
+    
 }
 
 h1 {
     font-size: 15px;
     text-align: left ;
+    font-size: 18px;
+   
 }
 
 .hide {
@@ -21,19 +26,21 @@ h1 {
     align-content: center;
 }
 .btn {
-    padding: 10px;
-    background-color: rgb(100, 100, 191);
-    border:rgb(100, 100, 191);
+    padding: 13px;
+    background-color: rgb(202, 232, 127);
+    border: rgb(202, 232, 127); ;
     border-radius: 11px;
+    color: black;
+    margin-top: 20px;
 
    
 }
 #highscore {
-display: none;
+    display: none;
 }
 
 .btn:hover {
-    background-color: rgb(209, 209, 250);
+    background-color: rgb(172, 200, 103);
     border:rgb(209, 209, 250);
 }
 
