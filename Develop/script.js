@@ -179,10 +179,24 @@ submitBtn.on('click', event => {
 
 lastpage = () => {
     const highscores = JSON.parse(localStorage.getItem("highscores")) || [];
-    highscoresList.text(highscores);
-    highscores.map(score => {
-        return `<li class="high-score">${score.name} - ${score.score}</li>`
-    }).join("");
+    var num = 1;
+    if (highscores !== null){
+        
+        
+        for (i = 0; i < highScores.length; i++){
+            var newRow = $("<tr>");
+            newRow.append($("<td>").text([num]));
+            newRow.append($("<td>").text(highScores[i].score.name));
+            newRow.append($("<td>").text(highScores[i].score.score));
+            $("tbody").append(newRow);
+            num++;
+        };
+    };
+};
+    // const highscores = JSON.parse(localStorage.getItem("highscores")) || [];
+    // highscoresList.text(highscores);
+    // highscores.map(score => {
+    //     return `<li class="high-score">${score.name} - ${score.score}</li>`
+    // }).join("");
     
     
-}
